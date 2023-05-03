@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>实验室人脸识别签到管理-登陆</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+<div id="container">
+    <div></div>
+    <div class="admin-login-background">
+        <!--<div class="admin-header">-->
+        <!--<img src="image/ex_logo.png" class="admin-logo">-->
+        <!--</div>-->
+        <form class="layui-form" action="" lay-filter="example">
+            <div>
+                <i class="layui-icon layui-icon-username admin-icon admin-icon-username"></i>
+                <input type="text" name="account" placeholder="请输入用户名"
+                       autocomplete="off"
+                       class="layui-input admin-input admin-input-username">
+            </div>
+            <div>
+                <i class="layui-icon layui-icon-password admin-icon admin-icon-password"></i>
+                <input type="password" name="password"
+                       placeholder="请输入密码"
+                       autocomplete="off"
+                       class="layui-input admin-input">
+            </div>
+<!--            <div>-->
+<!--                <input type="text" name="verify"-->
+<!--                       placeholder="请输入验证码"-->
+<!--                       autocomplete="off"-->
+<!--                       class="layui-input admin-input admin-input-verify">-->
+<!--                <img class="admin-captcha" src=""-->
+<!--                     onclick="updateVerify()">-->
+<!--            </div>-->
+            <button type="button" class="layui-btn  admin-button" id="bt_login">登录</button>
+
+
+        </form>
+    </div>
+</div>
+<script src="layui/layui.js"></script>
+<script>
+    layui.use(['form', 'layedit', 'laydate',"upload",], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,upload = layui.upload
+            ,laydate = layui.laydate;
+
+
+
+
+        //表单取值
+        layui.$('#bt_login').on('click', function(){
+            var data = form.val('example');
+          if (data.account=="admin"&&data.password=="123456"){
+              layer.msg("登录成功");
+              location.href="index.html";
+          }else {
+              layer.msg("账号密码不正确")
+          }
+
+
+        });
+
+    });
+</script>
+
+
+
+
+</body>
+</html>

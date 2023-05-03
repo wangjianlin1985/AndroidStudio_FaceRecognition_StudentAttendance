@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>学生签到记录</title>
+    <link rel="stylesheet" href="layui/css/layui.css" media="all">
+    <style>
+        body{margin: 10px;}
+        .demo-carousel{height: 200px; line-height: 200px; text-align: center;}
+
+
+        .layui-table-cell{
+            text-align:center;
+            height: auto;
+
+            white-space: normal;
+                              }
+
+        .layui-table img{
+
+            max-width:300px
+
+        }
+        .laydate_table {
+            display: none;
+        }
+        #laydate_hms{
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+
+<!--<div style="display:inline-block">-->
+<!--    <div style="display:inline-block"><input type="text" id="homenum" style="width:400px; height:30px; margin-top: 10px" name="homenum" lay-verify="homenum" autocomplete="off" value="2021-04"></div>-->
+<!--    <div style="display: inline-block"><button id="search" class="layui-btn" style="display:inline-block">查询</button></div>-->
+
+
+<!--</div>-->
+<table class="layui-hide" id="demo" lay-filter="test"></table>
+
+
+<script type="text/html" id="barDemo">
+
+
+<!--    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">查看签到记录</a>-->
+</script>
+
+
+
+
+<script src="layui/layui.all.js"></script>
+<script>
+
+
+    layui.use(['laydate', 'laypage', 'layer', 'table', 'carousel', 'upload', 'element', 'slider'], function(){
+        var laydate = layui.laydate //日期
+            ,laypage = layui.laypage //分页
+            ,layer = layui.layer //弹层
+            ,table = layui.table //表格
+            ,carousel = layui.carousel //轮播
+            ,upload = layui.upload //上传
+            ,element = layui.element //元素操作
+            ,slider = layui.slider //滑块
+
+        //向世界问个好
+       // layer.msg('Hello World');
+
+        //监听Tab切换
+        element.on('tab(demo)', function(data){
+            layer.tips('切换了 '+ data.index +'：'+ this.innerHTML, this, {
+                tips: 1
+            });
+        });
+        // var data={"code":0,"msg":"zzzz","count":1000,"data":[{"id":10000,"username":"user-0","sex":"女","city":"城市-0","sign":"签名-0","experience":255,"logins":24,"wealth":82830700,"classify":"作家","score":57},{"id":10001,"username":"user-1","sex":"男","city":"城市-1","sign":"签名-1","experience":884,"logins":58,"wealth":64928690,"classify":"词人","score":27},{"id":10002,"username":"user-2","sex":"女","city":"城市-2","sign":"签名-2","experience":650,"logins":77,"wealth":6298078,"classify":"酱油","score":31},{"id":10003,"username":"user-3","sex":"女","city":"城市-3","sign":"签名-3","experience":362,"logins":157,"wealth":37117017,"classify":"诗人","score":68},{"id":10004,"username":"user-4","sex":"男","city":"城市-4","sign":"签名-4","experience":807,"logins":51,"wealth":76263262,"classify":"作家","score":6},{"id":10005,"username":"user-5","sex":"女","city":"城市-5","sign":"签名-5","experience":173,"logins":68,"wealth":60344147,"classify":"作家","score":87},{"id":10006,"username":"user-6","sex":"女","city":"城市-6","sign":"签名-6","experience":982,"logins":37,"wealth":57768166,"classify":"作家","score":34},{"id":10007,"username":"user-7","sex":"男","city":"城市-7","sign":"签名-7","experience":727,"logins":150,"wealth":82030578,"classify":"作家","score":28},{"id":10008,"username":"user-8","sex":"男","city":"城市-8","sign":"签名-8","experience":951,"logins":133,"wealth":16503371,"classify":"词人","score":14},{"id":10009,"username":"user-9","sex":"女","city":"城市-9","sign":"签名-9","experience":484,"logins":25,"wealth":86801934,"classify":"词人","score":75}]};
+        //执行一个 table 实例
+        table.render({
+            elem: '#demo'
+
+           ,url: 'http://localhost:8080/record/getAllRecord' //数据接口
+           //  ,title: '用户表'
+           //  ,where:{month:'2021-04'}
+           , method:'POST'
+            ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                ,curr: 1 //设定初始在第 5 页
+                ,groups: 1 //只显示 1 个连续页码
+                // ,first: false //不显示首页
+                // ,last: false //不显示尾页
+                ,limits :10
+
+            }
+            ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+            ,defaultToolbar: ['filter', 'exports', 'print']
+           //  ,data:  data.data
+           //  ,page: true //开启分页
+           //  ,toolbar: 'default' //开启工具栏，此处显示默认图标，可以自定义模板，详见文档
+            ,totalRow: true //开启合计行
+            ,cols: [[ //表头
+                {type: 'checkbox',height: 40}
+                ,{field: 'id', title: 'ID', width:80, height: 40,sort: true}
+                ,{field: 'user', title: '学号', width:150,  height: 40,templet: "<div>{{d.user.account}}</div>"}
+                ,{field: 'user', title: '姓名', width:150,  height: 40,templet: "<div>{{d.user.name}}</div>"}
+                ,{field: 'user', title: '专业', width:150,  height: 40,templet: "<div>{{d.user.zhuanye}}</div>"}
+                ,{field: 'user', title: '班级', width:150,  height: 40,templet: "<div>{{d.user.banji}}</div>"}
+
+                ,{field: 'ctime', title: '签到时间', width:120,  height: 40}
+                ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
+            ]]
+        });
+        var $ = layui.$
+        $("#search").click(function(){
+
+            var homenum= $('#homenum').val();
+            // layer.msg("点击事件"+nanji+sex+name);
+
+            table.render({
+                elem: '#demo'
+
+                ,url: 'http://localhost:8080/record/getAllRecordByTime' //数据接口
+                //  ,title: '用户表'
+                ,where:{"month":homenum}
+
+                , method:'POST'
+                ,page: { //支持传入 laypage 组件的所有参数（某些参数除外，如：jump/elem） - 详见文档
+                    layout: ['limit', 'count', 'prev', 'page', 'next', 'skip'] //自定义分页布局
+                    ,curr: 1 //设定初始在第 5 页
+                    ,groups: 1 //只显示 1 个连续页码
+                    // ,first: false //不显示首页
+                    // ,last: false //不显示尾页
+                    ,limits :10
+
+                }
+
+                ,totalRow: true //开启合计行
+                ,cols: [[ //表头
+                    {type: 'checkbox',height: 40}
+                    ,{field: 'id', title: 'ID', width:80, height: 40,sort: true}
+                    ,{field:'img',title: '头像',width:120, height:120,templet:'<div><img  src="{{ d.img }} " style="height: 100px;width: 100px"></div>'}
+
+
+                    ,{field: 'name', title: '名字', width:120,  height: 40}
+                    ,{field: 'phone', title: '电话', width:150,  height: 40}
+                    ,{field: 'age', title: '年龄', width:120,  height: 40}
+                    ,{field: 'record', title: '签到次数', width:120, height: 40,templet: "<div>{{d.record.address}}</div>"}
+                    ,{field: 'record', title: '本月工资', width:120,  height: 40,templet: "<div>{{d.record.ctime}}</div>"}
+                    // ,{field:'img',title: '头像',templet:'<div><img  src="{{ d.img }} " style="height: 40px"></div>'}
+                    // ,{field:'status', title:'是否认证', width:85, templet: '#switchTpl'}
+                    ,{fixed: 'right', width: 165, align:'center', toolbar: '#barDemo'}
+                ]]
+            });
+
+
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){ //注：tool 是工具条事件名，test 是 table 原始容器的属性 lay-filter="对应的值"
+            var data = obj.data //获得当前行数据
+                ,layEvent = obj.event; //获得 lay-event 对应的值
+            if(layEvent === 'del'){
+                var homenum= $('#homenum').val();
+                location.href="qinadomanger.html?uid="+data.id+"&month="+homenum;
+            }
+        });
+
+        //执行一个轮播实例
+        carousel.render({
+            elem: '#test1'
+            ,width: '100%' //设置容器宽度
+            ,height: 200
+            ,arrow: 'none' //不显示箭头
+            ,anim: 'fade' //切换动画方式
+        });
+
+        laydate.render({
+
+            elem : "#homenum",
+            format : 'yyyy-MM',
+            type : 'month'
+        });
+
+        //分页
+        laypage.render({
+            elem: 'pageDemo' //分页容器的id
+            ,count: 10 //总页数
+            ,skin: '#1E9FFF' //自定义选中色值
+            //,skip: true //开启跳页
+            ,jump: function(obj, first){
+                if(!first){
+                    layer.msg('第'+ obj.curr +'页', {offset: 'b'});
+                }
+            }
+        });
+
+        //上传
+        upload.render({
+            elem: '#uploadDemo'
+            ,url: '' //上传接口
+            ,done: function(res){
+                console.log(res)
+            }
+        });
+
+        //滑块
+        var sliderInst = slider.render({
+            elem: '#sliderDemo'
+            ,input: true //输入框
+        });
+
+        // //底部信息
+        // var footerTpl = lay('#footer')[0].innerHTML;
+        // lay('#footer').html(layui.laytpl(footerTpl).render({}))
+        //     .removeClass('layui-hide');
+    });
+</script>
+</body>
+
+</html>

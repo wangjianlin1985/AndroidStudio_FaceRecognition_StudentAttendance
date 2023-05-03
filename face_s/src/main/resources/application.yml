@@ -1,0 +1,58 @@
+server:
+  port: 8080
+  #servlet:
+    #context-path: /face_s/base 
+
+web:
+#  文件上传路径
+  upload-path: C:/Users/Administrator/Desktop/res
+
+spring:
+  datasource:
+    name: test
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db_face?useUnicode=true&characterEncoding=UTF-8&useTimezone=true&serverTimezone=GMT%2b8
+    username: root
+    password: 123456
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: LEGACYHTML5
+    encoding: UTF-8
+    content: text/html
+    cache: false
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 200MB
+      max-request-size: 200MB
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath:/META-INF/resources/,classpath:/resources/,classpath:/static/,classpath:/public/,file:${web.upload-path}
+  jackson:
+      date-format: yyyy-MM-dd HH:mm:ss #如果使用字符串表示，用这行设置格式
+      timezone: GMT+8
+      serialization:
+        write-dates-as-timestamps: true #使用时间戳，使用数值timestamp表示日期
+
+mybatis:
+  mapper-locations: classpath*:mybatis/mapper/*.xml
+  configuration:
+    map-underscore-to-camel-cas: true
+    call-setters-on-nulls: true
+    cache-enabled: true
+  type-aliases-package: com.lewis.base.entity
+
+
+
+
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+
+

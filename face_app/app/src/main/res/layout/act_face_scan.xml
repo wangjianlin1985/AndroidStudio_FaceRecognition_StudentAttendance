@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+   android:gravity="center_horizontal"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_gravity="center_horizontal"
+        android:textSize="20sp"
+        android:layout_margin="@dimen/dp_10"
+        android:textColor="@color/colorPrimary"
+        android:text="请配合进行人脸验证"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <ImageView
+        android:scaleType="fitXY"
+        android:id="@+id/iv"
+        android:layout_margin="20dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@mipmap/sacn"
+        android:layout_width="200dp"
+        android:layout_height="200dp" />
+    <TextView
+        android:id="@+id/tv_result"
+        android:layout_marginTop="20dp"
+        android:textSize="20sp"
+        android:text="上传人脸照片"
+        android:textColor="@color/theme_color_red"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_info"
+        android:layout_margin="20dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="@dimen/dp_10"
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="@dimen/dp_10"
+            android:id="@+id/tv_zhuanye"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_marginTop="@dimen/dp_10"
+            android:id="@+id/tv_banji"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_qd"
+            android:layout_marginTop="@dimen/phoenix_dimen_20"
+            android:gravity="center"
+            android:text="签到"
+            android:textColor="@color/white"
+            android:background="@color/colorPrimary"
+            android:layout_width="250dp"
+            android:layout_height="40dp" />
+    </LinearLayout>
+
+
+</LinearLayout>

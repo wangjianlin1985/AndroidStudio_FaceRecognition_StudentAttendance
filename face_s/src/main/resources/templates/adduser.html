@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加学生信息</title>
+    <link rel="stylesheet" href="layui/css/layui.css">
+</head>
+<body class="layui-layout-body"  style="height: 3000px">
+
+
+<form class="layui-form" action="" lay-filter="example"  style="height: 3000px">
+    <div class="layui-form-item" >
+        <label class="layui-form-label">人脸图片</label>
+        <div class="layui-input-inline uploadHeadImage">
+            <div class="layui-upload-drag" id="headImg">
+                <i class="layui-icon"></i>
+                <p>点击上传图片</p>
+            </div>
+        </div>
+        <div class="layui-input-inline" style="height: 80px">
+            <div class="layui-upload-list">
+                <img class="layui-upload-img headImage" src="http://t.cn/RCzsdCq" style="height: 100px;width: 120px" id="demo1">
+                <p id="demoText"></p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">学号<span id="id" style="visibility: hidden"></span></label>
+        <div class="layui-input-block">
+            <input type="text" id="account" style="width:500px; height:50px;" name="account" lay-verify="account" autocomplete="off" placeholder="请输入" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">姓名</label>
+        <div class="layui-input-block">
+            <input type="text" id="name" style="width:500px; height:50px;" name="name" lay-verify="name" autocomplete="off" placeholder="请输入" class="layui-input">
+
+
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">专业</label>
+        <div class="layui-input-block">
+            <input type="text" id="zhuanye" style="width:500px; height:50px;" name="zhuanye" lay-verify="zhuanye" autocomplete="off" placeholder="请输入" class="layui-input">
+
+
+        </div>
+    </div>
+
+    <div class="layui-form-item">
+        <label class="layui-form-label">班级</label>
+        <div class="layui-input-block">
+            <input type="text" id="banji" style="width:500px; height:50px;" name="banji" lay-verify="banji" autocomplete="off" placeholder="请输入" class="layui-input">
+
+
+        </div>
+    </div>
+
+
+
+
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+<!--            <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-setval">赋值</button>-->
+            <button type="button" class="layui-btn layui-btn-normal" id="LAY-component-form-getval">提交</button>
+<!--            <button type="submit" class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>-->
+        </div>
+    </div>
+</form>
+
+<script src="layui/layui.all.js"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+<script>
+    layui.use(['form', 'layedit', 'laydate',"upload",], function(){
+        var form = layui.form
+            ,layer = layui.layer
+            ,layedit = layui.layedit
+            ,upload = layui.upload
+            ,laydate = layui.laydate;
+
+        //日期
+        laydate.render({
+            elem: '#date'
+        });
+        laydate.render({
+            elem: '#date1'
+        });
+
+        //创建一个编辑器
+        var editIndex = layedit.build('LAY_demo_editor');
+
+        //自定义验证规则
+        form.verify({
+            title: function(value){
+                if(value.length < 5){
+                    return '账号至少得5个字符啊';
+                }
+            }
+
+            ,content: function(value){
+                layedit.sync(editIndex);
+            }
+        });
+
+
+
+        var fname;
+
+        var head_pic="";
+        var uploadInst = upload.render({
+            elem: '#headImg'
+            , url: 'http://localhost:8080/upload'
+            , size: 500
+            , before: function (obj) {
+
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    layui.$('#demo1').attr('src', result); //图片链接（base64）
+                    console.log(file.name); //得到文件对象
+                    fname=file.name
+                });
+
+
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code > 0) {
+                    return layer.msg('上传失败');
+                }
+                layer.msg('上传成功');
+                head_pic="http://192.168.1.5:8080/"+res.data;
+                //上传成功
+                //打印后台传回的地址: 把地址放入一个隐藏的input中, 和表单一起提交到后台, 此处略..
+                /*   console.log(res.data.src);*/
+                // window.parent.uploadHeadImage(res.data);
+                // var demoText = $('#demoText');
+                // demoText.html('<span style="color: #8f8f8f;">上传成功!!!</span>');
+            }
+            , error: function () {
+                //演示失败状态，并实现重传
+                var demoText = $('#demoText');
+                demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+                demoText.find('.demo-reload').on('click', function () {
+                    uploadInst.upload();
+                });
+            }
+        });
+
+
+
+        //表单取值
+        layui.$('#LAY-component-form-getval').on('click', function(){
+            var data = form.val('example');
+            var type= layui.$('#type').val();
+
+
+
+                layui.jquery.ajax({
+                    url:"http://localhost:8080/user/addUser",
+                    data:{'name':data.name,'account':data.account,'zhuanye':data.zhuanye,'banji':data.banji,'img':head_pic,'fname':fname},
+                    type:"Post",
+                    success:function(result){
+                        console.log(result);
+                        layer.msg(result.msg);
+
+                    },
+                    error:function(result){
+                        // $.messager.alert('错误',result.msg);
+                    }
+                });
+
+
+        });
+
+    });
+</script>
+
+</body>
+</html>
